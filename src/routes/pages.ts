@@ -1,12 +1,13 @@
 import { Router, Request, Response } from "express";
 import Page from "../models/Page";
+import auth from "../middleware/auth";
 
 const router = Router();
 
 // @route   GET /api/pages
 // @desc    Get all pages for a specific client
-// @access  Public
-router.get("/", async (req: Request, res: Response) => {
+// @access  Private
+router.get("/", auth, async (req: Request, res: Response) => {
   const { clientId } = req.query;
 
   try {
@@ -19,8 +20,8 @@ router.get("/", async (req: Request, res: Response) => {
 
 // @route   POST /api/pages
 // @desc    Create a new page
-// @access  Public
-router.post("/", async (req: Request, res: Response) => {
+// @access  Private
+router.post("/", auth, async (req: Request, res: Response) => {
   const { clientId, title, content, featuredImage } = req.body;
 
   try {
@@ -41,8 +42,8 @@ router.post("/", async (req: Request, res: Response) => {
 
 // @route   GET /api/pages/:id
 // @desc    Get a single page by ID
-// @access  Public
-router.get("/:id", async (req: Request, res: Response) => {
+// @access  Private
+router.get("/:id", auth, async (req: Request, res: Response) => {
   const { id } = req.params;
   const { clientId } = req.query;
 
@@ -63,8 +64,8 @@ router.get("/:id", async (req: Request, res: Response) => {
 
 // @route   PUT /api/pages/:id
 // @desc    Update a page by ID
-// @access  Public
-router.put("/:id", async (req: Request, res: Response) => {
+// @access  Private
+router.put("/:id", auth, async (req: Request, res: Response) => {
   const { id } = req.params;
   const { clientId, title, content, featuredImage } = req.body;
 
@@ -89,8 +90,8 @@ router.put("/:id", async (req: Request, res: Response) => {
 
 // @route   DELETE /api/pages/:id
 // @desc    Delete a page by ID
-// @access  Public
-router.delete("/:id", async (req: Request, res: Response) => {
+// @access  Private
+router.delete("/:id", auth, async (req: Request, res: Response) => {
   const { id } = req.params;
   const { clientId } = req.body;
 
