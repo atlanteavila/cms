@@ -8,7 +8,7 @@ const router = Router();
 
 // Register User
 router.post("/register", async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, orgId, role } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -17,14 +17,14 @@ router.post("/register", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    user = new User({ username, email, password });
+    user = new User({ username, email, password, orgId, role });
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
 
     await user.save();
 
-    const payload = { userId: user.id };
+    const payload = { userId: user.id, orgId: user.orgId, role: user.role };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET!, {
       expiresIn: "1h",
@@ -41,7 +41,6 @@ router.post("/login", (req: Request, res: Response, next) => {
   passport.authenticate(
     "local",
     { session: false },
-    /* TODO: Find proper types for the following issue */
     (err: any, user: any, info: any) => {
       if (err || !user) {
         return res.status(400).json({
@@ -55,7 +54,7 @@ router.post("/login", (req: Request, res: Response, next) => {
           res.send(err);
         }
 
-        const payload = { userId: user.id };
+        const payload = { userId: user.id, orgId: user.orgId, role: user.role };
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {
           expiresIn: "1h",
         });
