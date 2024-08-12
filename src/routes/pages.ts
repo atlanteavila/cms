@@ -22,8 +22,8 @@ router.get("/", auth, async (req: Request, res: Response) => {
 // @desc    Create a new page
 // @access  Private
 router.post("/", auth, async (req: Request, res: Response) => {
+  console.log(req.body);
   const { clientId, title, content, featuredImage } = req.body;
-
   try {
     const page = new Page({
       clientId,
