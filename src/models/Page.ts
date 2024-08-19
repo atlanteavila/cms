@@ -7,6 +7,7 @@ interface IPage extends Document {
   featuredImage?: string;
   createdAt: Date;
   updatedAt: Date;
+  published: boolean;
 }
 
 const PageSchema = new Schema<IPage>({
@@ -35,6 +36,10 @@ const PageSchema = new Schema<IPage>({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  published: {
+    type: Boolean,
+    default: false,
   },
 });
 
